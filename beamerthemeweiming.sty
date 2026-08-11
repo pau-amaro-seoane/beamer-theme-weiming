@@ -1,0 +1,491 @@
+% ==============================================================================
+% BEAMER THEME: WEIMING 
+% =======================================================================
+%
+% Copyright (c) 2026 Pau Amaro Seoane
+%
+% Permission to use, copy, modify, and/or distribute this software for any
+% purpose with or without fee is hereby granted, provided that the above
+% copyright notice and this permission notice appear in all copies.
+%
+% THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+% WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+% MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+% ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+% WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+% ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+% OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+%
+% ==================================================================================
+%
+% ABOUT THIS THEME:
+% Named after Wèimíng Hú (未名湖) - The "Unnamed Lake" at Peking University.
+% This theme is designed for high-clarity academic presentations, specifically 
+% tailored to gracefully handle large plots, media embeds, and dense citations.
+%
+% ACKNOWLEDGEMENT:
+% Certain visual aesthetics, progress bar mechanics, and color palettes within 
+% this template have been heavily inspired by the excellent work found at 
+% https://github.com/matze/mtheme. Please note that this package is an 
+% independent creation built from the ground up to serve specific presentation 
+% needs, and it is not a direct modification of that theme.
+% =========================================================================
+
+% Announce the package to the LaTeX compiler so it can be loaded via \usepackage
+\ProvidesPackage{beamerthemeweiming}
+
+% Restrict the execution of this code to presentation mode only. 
+% This prevents errors if someone compiles the document in 'article' mode.
+\mode<presentation>
+
+% ===================================================================================
+% SECTION 1: CORE PACKAGE DEPENDENCIES & ROBUST TYPOGRAPHY
+% ========================================================================
+
+%xcolor: Required for defining exact HTML, RGB, and grayscale colors.
+\RequirePackage{xcolor}
+
+% graphicx: The standard package for including external images (PDF, PNG, JPEG).
+\RequirePackage{graphicx}
+
+% multimedia: Provided by Beamer to handle embedding external video files.
+% Essential for the custom \slidemovie macro defined later in this file.
+\RequirePackage{multimedia}
+
+% tikz: The premier graphics drawing package for LaTeX. Used heavily here 
+% to draw the progress bars, custom title boxes, and semantic shapes.
+\RequirePackage{tikz}
+
+% pgfplots: A high-quality data plotting package. Loaded here to ensure 
+% compatibility with standard plotting color cycles.
+\RequirePackage{pgfplots}
+
+% tcolorbox: A modern package for drawing colored text boxes.
+\RequirePackage{tcolorbox}
+
+% setspace: Allows for fine-grained control over line spacing (e.g., in bibliographies).
+\RequirePackage{setspace}
+
+% moresize: Extends the default LaTeX font sizes to include \ssmall and \HUGE.
+\RequirePackage{moresize}
+
+% tikz libraries: We must preload these specific TikZ modules so we can calculate
+% relative coordinates and draw backgrounds behind nodes.
+\usetikzlibrary{backgrounds, calc, positioning}
+
+% --- BASE PALETTE IMPORT ---
+% We load ONLY the color theme from metropolis to adopt their highly readable 
+% high-contrast palette (dark teal primary, light grey background).
+\usecolortheme{metropolis}
+
+% --- ROBUST CANTARELL FONT LOADING ---
+% We strictly use standard LaTeX font encoding (T1) and Type-1 fonts to ensure
+% this theme compiles flawlessly under both pdfLaTeX and XeLaTeX without 
+% fontspec throwing "missing font weight" errors.
+\RequirePackage[T1]{fontenc}
+\RequirePackage[type1,default]{cantarell} 
+
+% --- BEAMER FONT SIZE OVERRIDES ---
+% Beamer has a habit of mixing serif and sans-serif sizes in math/text mode. 
+% We manually enforce sizes across all major slide elements to keep the Cantarell 
+% typography consistent and clean.
+\setbeamerfont{title}{size=\Large} 
+\setbeamerfont{author}{size=\small} 
+\setbeamerfont{date}{size=\small} 
+\setbeamerfont{section title}{size=\Large} 
+\setbeamerfont{block title}{size=\normalsize} 
+\setbeamerfont{subtitle}{size=\large} 
+% Note: We intentionally avoid \scshape in frametitle to prevent pdfLaTeX warnings.
+\setbeamerfont{frametitle}{size=\large} 
+\setbeamerfont{caption}{size=\small} 
+\setbeamerfont{page number in head/foot}{size=\scriptsize} 
+
+% ======================================================================
+% SECTION 2: COLOR DEFINITIONS & MACROS
+% ==============================================================================
+
+% Internal toggles for the progress bar rendering logic
+\newif\if@useTitleProgressBar
+\newif\if@protectFrameTitle
+\@useTitleProgressBartrue  % The thin progress bar is ON by default
+\@protectFrameTitlefalse   % Do not over-protect frametitle expansion
+
+% Define the vertical offset used to push the main title down on the title page
+\newlength{\@mtheme@voffset}
+\setlength{\@mtheme@voffset}{2em}
+
+% --- CUSTOM THEME COLORS ---
+% dimred: A custom red designed specifically to reduce eye strain in darkened 
+% presentation rooms. Standard red (1,0,0) is often too harsh.
+\definecolor{dimred}{rgb}{0.85, 0.1, 0.1}
+
+% TolColors: A scientifically derived color palette optimized for colorblind 
+% accessibility in data plotting. 
+\definecolor{TolColor1}{HTML}{332288}   % dark purple
+\definecolor{TolColor2}{HTML}{6699CC}   % dark blue
+\definecolor{TolColor3}{HTML}{88CCEE}   % light blue
+\definecolor{TolColor4}{HTML}{44AA99}   % light green
+\definecolor{TolColor5}{HTML}{117733}   % dark green
+\definecolor{TolColor6}{HTML}{999933}   % dark brown
+\definecolor{TolColor7}{HTML}{DDCC77}   % light brown
+\definecolor{TolColor8}{HTML}{661100}   % dark red
+\definecolor{TolColor9}{HTML}{CC6677}   % light red
+\definecolor{TolColor10}{HTML}{AA4466}  % light pink
+\definecolor{TolColor11}{HTML}{882255}  % dark pink
+\definecolor{TolColor12}{HTML}{AA4499}  % light purple
+
+% Grayscale definitions used for subtle citations and horizontal lines
+\definecolor{light-gray}{gray}{0.35}
+\definecolor{ultra-light-gray}{gray}{0.65}
+\definecolor{beyond-ultra-light-gray}{gray}{0.85}
+
+% --- TEXT COLOR MACROS ---
+% These commands quickly wrap text in the grayscale colors defined above.
+\newcommand{\grey}[1]{\textcolor{light-gray}{#1}}
+\newcommand{\verygrey}[1]{\textcolor{ultra-light-gray}{#1}}
+\newcommand{\supergrey}[1]{\textcolor{beyond-ultra-light-gray}{#1}}
+
+% --- CITATION MACROS ---
+% Specialized commands for rendering academic citations in various sizes.
+\newcommand{\REFgrey}[1]{{\tiny{\it{\textcolor{light-gray}{[#1]}}}}\normalsize}
+\newcommand{\REFverygrey}[1]{{\tiny{\it{\textcolor{ultra-light-gray}{[#1]}}}}\normalsize}
+\newcommand{\Citep}[1]{{\footnotesize{\it{\textcolor{light-gray}{[#1]}}}}\normalsize}
+\newcommand{\Cite}[1]{{\footnotesize{\it{\textcolor{light-gray}{#1}}}}\normalsize}
+% myREF highlights self-citations in orange for emphasis
+\newcommand{\myREF}[1]{{\ssmall{\textbf{\textcolor{orange}{\textit{[#1]}}}}\normalsize}}
+
+% abstractline draws a subtle dotted separator line.
+\newcommand{\abstractline}{\noindent\makebox[\linewidth]{\resizebox{0.8\linewidth}{1pt}{\textcolor{ultra-light-gray}{$\bullet$}}}}
+
+% myrefs creates a dedicated block of references separated by the abstractline.
+\newcommand{\myrefs}[1]{{\abstractline \\ \ssmall{\begin{spacing}{0.98}\textcolor{light-gray}{[#1]}\end{spacing}}\normalsize}}
+
+% MyURL forces a URL to render in bold font for higher visibility.
+\newcommand{\MyURL}[1]{\href{#1}{\textbf{#1}}}
+
+% =================================================================================
+% SECTION 3: TIKZ STYLES (CUSTOM BOXES)
+% ========================================================================
+
+% TitleBox: A prominent orange container with white text and thick borders.
+\tikzstyle{TitleBox} = [draw=black, fill=orange!80, very thick,
+                         rectangle, rounded corners, inner sep=10pt,
+                         inner ysep=10pt, text=white, text centered]
+
+% note: An inverted version of TitleBox—white interior, orange border.
+\tikzstyle{note} = [draw=orange, fill=white, very thick,
+                    rectangle, rounded corners, inner sep=10pt,
+                    inner ysep=10pt, text=black]
+
+% box: A standard emphasis box featuring a red boundary over a light blue fill.
+\tikzstyle{box} = [draw=red, fill=blue!20, very thick,
+                    rectangle, rounded corners, inner sep=10pt,
+                    inner ysep=20pt, text=black]
+
+% fancytitle: A helper style used to overlay a floating title tab on top of 'box'.
+\tikzstyle{fancytitle} =[fill=red, text=white]
+
+% sectionbox: A completely borderless shape relying entirely on color contrast.
+\tikzstyle{sectionbox} = [draw=white, fill=blue!50, very thick,
+                    rectangle, rounded corners, inner sep=10pt,
+                    inner ysep=10pt, text=white, text centered]
+
+% ===========================================================================
+% SECTION 4: LIST ENVIRONMENTS (COMPACT)
+% =====================================================================================
+
+% Standard LaTeX lists consume massive amounts of vertical space. 
+% These "narrow" environments force all separation variables to 0 or 1pt,
+% making them ideal for dense, multi-line bullet points in academic slides.
+
+\newenvironment{narrow_itemize}{
+\begin{itemize}
+  \setlength{\itemsep}{1pt} 
+  \setlength{\parskip}{0pt} 
+  \setlength{\parsep}{0pt}  
+}{\end{itemize}}
+
+\newenvironment{narrow_enumerate}{
+\begin{enumerate}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{\end{enumerate}}
+
+\newenvironment{narrow_description}{
+\begin{description}
+  \setlength{\itemsep}{1pt}
+  \setlength{\parskip}{0pt}
+  \setlength{\parsep}{0pt}
+}{\end{description}}
+
+% =====================================================================
+% SECTION 5: BEAMER TEMPLATES & PROGRESS BAR LOGIC
+% ==========================================================================
+
+% Strip away standard Beamer navigation symbols to minimize visual clutter
+\setbeamertemplate{navigation symbols}{}
+
+% Define a perfectly safe text bullet that works inherently in pdfLaTeX
+\newcommand{\itemBullet}{\textbullet}
+\setbeamertemplate{itemize item}{\itemBullet}
+\setbeamertemplate{itemize subitem}{\itemBullet}
+\setbeamertemplate{itemize subsubitem}{\itemBullet}
+
+% Enforce standard formatting for figure and table captions
+\setbeamertemplate{caption label separator}{: }
+\setbeamertemplate{caption}[numbered]
+
+% --- PROGRESS BAR MATHEMATICS ---
+% We enter \makeatletter mode so LaTeX understands commands containing '@'.
+\makeatletter
+
+\def\progressbar@sectionprogressbar{}
+\def\progressbar@titleprogressbar{}
+
+% Allocate counter variables to track slide numbers
+\newcount\progressbar@tmpcounta 
+\newcount\progressbar@tmpcountb 
+% Allocate dimension variables to calculate physical width on the page
+\newdimen\progressbar@pbht      
+\newdimen\progressbar@pbwd      
+\newdimen\progressbar@tmpdim    
+
+% Hardcode the maximum width and height for the section-level progress bar
+\progressbar@pbwd=22em
+\progressbar@pbht=0.4pt
+
+% Macro to render the large progress bar (typically on section divider frames)
+\def\progressbar@sectionprogressbar{%
+  {\usebeamercolor{palette primary}%
+    \progressbar@tmpcounta=\insertframenumber 
+    \progressbar@tmpcountb=\inserttotalframenumber 
+    \progressbar@tmpdim=\progressbar@pbwd
+    % Mathematical operation: Width = (Current Frame / Total Frames) * Max Width
+    \divide\progressbar@tmpdim by 100
+    \multiply\progressbar@tmpdim by \progressbar@tmpcounta
+    \divide\progressbar@tmpdim by \progressbar@tmpcountb
+    \multiply\progressbar@tmpdim by 100
+    \fontsize{1em}{1em}\selectfont
+    \makebox[\textwidth][c]{
+      \begin{tikzpicture}[tight background]
+        % Print the name of the section directly above the line
+        \node[anchor=south west, fg, inner sep=0pt, text width=\progressbar@pbwd] at (0pt, 0pt) {\insertsectionHEAD};
+        % Draw the empty background track of the progress bar
+        \draw[anchor=west, fg!20, fill=fg!20, inner sep=0pt]
+        (0, -1ex) rectangle ++ (\progressbar@pbwd, \progressbar@pbht);
+        % Overlay the filled portion of the progress bar
+        \draw[anchor=west, fg, fill=fg, inner sep=0pt]
+        (0, -1ex) rectangle ++ (\progressbar@tmpdim, \progressbar@pbht);
+      \end{tikzpicture}%
+    }
+  }
+}
+
+% Macro to render the thin horizontal progress bar directly under slide titles
+\if@useTitleProgressBar
+\def\progressbar@titleprogressbar{%
+  % Calculate completion percentage based on the full paper width
+  \progressbar@tmpcounta=\insertframenumber
+  \progressbar@tmpcountb=\inserttotalframenumber
+  \progressbar@tmpdim=\paperwidth
+  \divide\progressbar@tmpdim by 100
+  \multiply\progressbar@tmpdim by \progressbar@tmpcounta
+  \divide\progressbar@tmpdim by \progressbar@tmpcountb
+  \multiply\progressbar@tmpdim by 100
+  {%
+    \usebeamercolor{palette quaternary}%
+    \usebeamercolor{alerted text}%
+    \begin{tikzpicture}[tight background]
+      % Draw the empty track across the top of the slide
+      \draw[palette quaternary.fg, fill=palette quaternary.fg] (0, 0) rectangle ($(\paperwidth, 0.6pt) - (0.4pt, 0)$);
+      % Fill the track proportionally in the alert color
+      \draw[alerted text.fg, fill=alerted text.fg] (0, 0) rectangle (\progressbar@tmpdim, 0.6pt);
+    \end{tikzpicture}%
+  }%
+}
+\fi
+
+% Utility macro to forcefully capitalize the section title string
+\newcommand{\insertsectionHEAD}{%
+  \expandafter\insertsectionHEADaux\insertsectionhead}
+\newcommand{\insertsectionHEADaux}[3]{\textsc{{#3}}}
+
+% --- SLIDE TITLE (FRAMETITLE) DEFINITION ---
+\setbeamertemplate{frametitle}{%
+\nointerlineskip % Strip all default Beamer vertical padding
+% Create a rigid color box extending the full width of the screen
+\begin{beamercolorbox}[wd=\paperwidth,leftskip=0.3cm,rightskip=0.3cm,ht=2.5ex,dp=1.5ex]{frametitle}
+\if@protectFrameTitle
+  \usebeamerfont{frametitle}{\protect\insertframetitle}%
+\else
+  \usebeamerfont{frametitle}{\insertframetitle}%
+\fi
+\end{beamercolorbox}%
+% Dynamically append the thin title progress bar below the box
+\if@useTitleProgressBar
+  \vspace{-.5em}
+  \begin{beamercolorbox}[wd=\paperwidth,ht=1pt,dp=0pt]{frametitle}
+    \progressbar@titleprogressbar
+  \end{beamercolorbox}
+\fi
+\vspace{\@mtheme@voffset} % Reintroduce specific padding before the main slide text
+}
+
+% --- SLIDE FOOTER (FOOTLINE) DEFINITION ---
+\setbeamertemplate{footline}
+{%
+% A simple color box aligned to the bottom right for slide numbering
+\begin{beamercolorbox}[wd=\textwidth,ht=3ex,dp=3ex,leftskip=0.3cm,rightskip=0.3cm]{structure}%
+  \hfill\usebeamerfont{page number in head/foot}%
+  \insertframenumber%
+\end{beamercolorbox}%
+}
+
+% Exit core LaTeX programming mode
+\makeatother
+
+% ===============================================================================
+% SECTION 6: SEMANTIC MARKUP & DISPLAY ENVIRONMENTS
+% ====================================================================
+
+% \idea{text}: A semantic wrapper that applies no formatting. 
+% It exists purely to pair logically with the \point{} command in the source code.
+\newcommand{\idea}[1]{#1}
+
+% \point{text}: Emphasizes the "punchline" of a slide.
+% Uses the custom dimred color and italicization to draw the eye naturally.
+\newcommand{\point}[1]{\textcolor{dimred}{\textit{#1}}}
+
+% \plain{text}: Generates a totally bare slide (no headers/footers).
+% It uses the dark primary color palette to create a high-contrast break 
+% between visually dense slides.
+\newcommand{\plain}[1]{%
+  \begingroup
+  \setbeamercolor{background canvas}{use=palette primary,bg=palette primary.fg}
+  \begin{frame}[plain]{#1}
+    \centering
+    % Vertically centers the text and forces it to white
+    \vfill\vspace{1em}\usebeamerfont{section title}\textcolor{white}{#1}\vfill
+  \end{frame}
+  \endgroup
+}
+
+% Beamer hook: Automatically add 0.5cm of spacing after every itemize block 
+% to ensure text doesn't feel cramped.
+\AddToHook{cmd/itemize/after}{%
+  \addtolength{\itemsep}{0.5cm}%
+}
+
+% figcommentlist: An ultra-compact list environment explicitly designed 
+% for placing multi-line annotations directly under a plot or figure.
+\ifdefined\figcommentlist\else
+  \newenvironment{figcommentlist}{%
+    \begin{itemize}%
+      \setlength{\itemsep}{2pt}%
+      \setlength{\parsep}{2pt}%
+      \setlength{\topsep}{2pt}%
+      \setlength{\partopsep}{0pt}%
+      \setlength{\leftmargin}{1.5em}%
+    }{%
+    \end{itemize}%
+  }
+\fi
+
+%\plotslide[options]{filename}: A macro that consumes an entire slide with one image.
+% It applies a 1.5-second fade-in transition (if supported by the PDF viewer) 
+% to soften the visual impact of sudden bright graphs.
+\newcommand{\plotslide}[2][]{%
+  \begin{frame}[plain,#1] 
+    \transfade[duration=1.5] 
+    \centering
+    \vspace*{\fill} 
+    \includegraphics[width=0.9\textwidth,height=0.8\textheight,keepaspectratio]{#2}
+    \vspace*{\fill} 
+  \end{frame}
+}
+
+% \plotslidecomment[options]{filename}{comment1}{comment2}{comment3}{comment4}
+% Renders a plot pushed slightly upward, leaving just enough room at the bottom
+% for up to four dynamically rendered bullet points.
+\newcommand{\plotslidecomment}[6][]{%
+  \begin{frame}[plain,#1]
+    \transfade[duration=1.5]
+    \centering
+    \vspace{0.2cm} % Top padding
+    \includegraphics[width=0.9\textwidth,height=0.6\textheight,keepaspectratio]{#2}
+    \vspace{0.1cm} % Gap between image and text
+    \def\a{#3}\def\b{#4}\def\c{#5}\def\d{#6}% Store arguments to test for emptiness
+    \ifx\a\empty\else{% Only render the list if the first comment actually exists
+      \scriptsize%
+      \begin{figcommentlist}
+        \item #3%
+        \ifx\b\empty\else\item #4\fi % Render comment 2 if populated
+        \ifx\c\empty\else\item #5\fi % Render comment 3 if populated
+        \ifx\d\empty\else\item #6\fi % Render comment 4 if populated
+      \end{figcommentlist}%
+    }\fi
+    \vspace*{\fill}
+  \end{frame}
+}
+
+% \slidemovie[options]{filename}{poster}{caption}: Embeds playable video files.
+% Requires a static placeholder image (poster) to be clicked on during the presentation.
+\newcommand{\slidemovie}[4][]{%
+  \begin{frame}[plain]
+    \transfade[duration=1.5]
+    \centering
+    \vspace*{\fill}
+    \movie[#1]{% Initialize the multimedia player
+      \includegraphics[width=0.9\textwidth,height=0.7\textheight,keepaspectratio]{#3}% Static image
+    }{#2}% Video path
+    \par\vspace{0.3cm}
+    {\small #4} % Accompanying caption
+    \vspace*{\fill}
+  \end{frame}
+}
+
+% =========================================================================
+% SECTION 7: CUSTOM TITLE PAGE LAYOUT
+% ==================================================================================
+
+% Enter core LaTeX programming mode
+\makeatletter
+
+% Override Beamer's \maketitle macro to force it onto a totally empty (plain) frame.
+\def\maketitle{\ifbeamer@inframe\titlepage\else\frame[plain]{\titlepage}\fi}
+\def\titlepage{\usebeamertemplate{title page}}
+
+% Rebuild the actual layout structure of the title page from scratch
+\setbeamertemplate{title page}
+{
+  \begin{minipage}[b][\paperheight]{\textwidth}
+    \vspace*{\@mtheme@voffset}
+    \vfill % Force the title block down toward the center of the page
+    \ifx\inserttitle\@empty\else
+    % Format the main title string
+    {\raggedright\linespread{1.0}\usebeamerfont{title}\usebeamercolor[fg]{title}\scshape{\inserttitle}\par}
+    \vspace*{0.5em}
+    \fi
+    \ifx\insertsubtitle\@empty\else
+    % Format the subtitle string
+    {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}
+    \vspace*{0.5em}
+    \fi
+    % Draw a thin dividing line using the alert color (typically orange/red)
+    \begin{tikzpicture}\draw[alerted text.fg] (0, 0) -- (\textwidth, 0);\end{tikzpicture}%
+    \vspace*{1em}
+    \ifx\insertauthor\@empty\else
+    % Format the author string below the dividing line
+    {\usebeamerfont{author}\usebeamercolor[fg]{author}\insertauthor\par}
+    \vspace*{0.25em}
+    \fi
+    \vfill % Consume the remaining vertical space at the bottom of the page
+    \vspace*{\@mtheme@voffset}
+  \end{minipage}
+}
+\makeatother
+
+% Re-enable all modes before exiting the style file
+\mode<all>
+\endinput
