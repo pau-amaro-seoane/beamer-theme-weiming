@@ -1,7 +1,7 @@
 # beamerthemeweiming
 
 <p align="center">
-  <img src="weiming-lake.png" alt="Weiming Lake and Boya Pagoda" width="400"/>
+  <img src="weiming-lake.png" alt="Weiming Lake and Boya Pagoda" width="800"/>
 </p>
 
 A clean, high-clarity Beamer template named after Wèimíng Hú (未名湖) — the "Unnamed Lake" at Peking University. Designed specifically for any presentation requiring handling of large plots, media embeds, and citations, with native support for multiple color schemes.
