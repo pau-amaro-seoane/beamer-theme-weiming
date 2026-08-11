@@ -1,12 +1,13 @@
 # beamerthemeweiming
 
-A clean, high-clarity Beamer template named after Wèimíng Hú (未名湖) — the "Unnamed Lake" at Peking University. Designed specifically for any presentation requiring handling of large plots, media embeds, and citations.
+A clean, high-clarity Beamer template named after Wèimíng Hú (未名湖) — the "Unnamed Lake" at Peking University. Designed specifically for any presentation requiring handling of large plots, media embeds, and citations, with native support for multiple color schemes.
 
 ---
 
 ## Table of Contents
 
 - [Overview](#overview)
+- [Theme Options (Color Schemes)](#theme-options-color-schemes)
 - [Acknowledgements](#acknowledgements)
 - [Features](#features)
 - [Installation](#installation)
@@ -24,7 +25,7 @@ A clean, high-clarity Beamer template named after Wèimíng Hú (未名湖) — 
 **beamerthemeweiming** is a robust, minimalist Beamer theme developed to maximize readability and reduce visual clutter in academic presentations. 
 
 It provides a highly consistent visual style featuring:
-- A high-contrast light background with a dark teal primary palette.
+- Multiple high-contrast color palettes (Light, Dark, and Teal).
 - Progress bars for structural pacing and section tracking.
 - Dimmed red highlights to emphasize key points without inducing eye strain.
 - Robust font handling that compiles flawlessly under both `pdflatex` and `xelatex`.
@@ -33,9 +34,30 @@ It provides a highly consistent visual style featuring:
 
 ---
 
+## Theme Options (Color Schemes)
+
+The theme natively supports three distinct global color schemes to suit different environments (e.g., bright conference rooms vs. dark auditoriums). You can activate them by passing the respective option to the package:
+
+*   **`[light]` (Default):** A high-contrast light gray/white background with dark teal text and structural elements.
+    ~~~latex
+    \usepackage[light]{beamerthemeweiming} % or simply \usepackage{beamerthemeweiming}
+    ~~~
+*   **`[dark]`:** A pure black background with white text, optimized for low-light environments and minimal eye strain.
+    ~~~latex
+    \usepackage[dark]{beamerthemeweiming}
+    ~~~
+*   **`[teal]`:** A solid dark teal background with white text, utilizing the signature Metropolis primary color across all slides.
+    ~~~latex
+    \usepackage[teal]{beamerthemeweiming}
+    ~~~
+
+> **Examples Provided:** To help you choose, I have added three pre-compiled PDFs alongside the `main.tex` source file: `main_light.pdf`, `main_dark.pdf`, and `main_teal.pdf`.
+
+---
+
 ## Acknowledgements
 
-Certain visual aesthetics, progress bar mechanics, and color palettes within this template have been heavily inspired by the excellent work found at [https://github.com/matze/mtheme](https://github.com/matze/mtheme). Please note that this package is an independent creation built from the ground up to serve specific presentation needs, and **it is not a direct modification of that theme**.
+Certain visual aesthetics, progress bar mechanics, and color palettes within this template have been heavily inspired by the excellent work found at https://github.com/matze/mtheme. Please note that this package is an independent creation built from the ground up to serve specific presentation needs, and **it is not a direct modification of that theme**.
 
 ---
 
@@ -43,6 +65,7 @@ Certain visual aesthetics, progress bar mechanics, and color palettes within thi
 
 | Feature | Description |
 |---------|-------------|
+| **Color Options** | `[light]`, `[dark]`, and `[teal]` global color schemes |
 | **Progress Bars** | Automated tracking beneath frame titles and on section slides |
 | **Robust Typography** | Forced Type-1 Cantarell fonts to prevent engine crashes |
 | **Dimmed red highlights** | Softer red (`dimred`) for emphasis without eye strain |
@@ -64,14 +87,14 @@ Certain visual aesthetics, progress bar mechanics, and color palettes within thi
 
 Simply copy `beamerthemeweiming.sty` and the `Makefile` into the same folder as your `.tex` presentation file:
 
-```bash
+~~~bash
 cp beamerthemeweiming.sty /path/to/your/presentation/
 cp Makefile /path/to/your/presentation/
-```
+~~~
 
 ### Option 2: Install System-Wide (TeX Live)
 
-```bash
+~~~bash
 # Create the directory if it doesn't exist
 mkdir -p ~/texmf/tex/latex/beamerthemeweiming/
 
@@ -80,7 +103,7 @@ cp beamerthemeweiming.sty ~/texmf/tex/latex/beamerthemeweiming/
 
 # Update the TeX database
 texhash ~/texmf
-```
+~~~
 
 ---
 
@@ -88,17 +111,18 @@ texhash ~/texmf
 
 Below is a fully documented, minimal working example showcasing how to structure your presentation and utilize the custom commands provided by the `weiming` theme. Save this as `main.tex`.
 
-```latex
+~~~latex
 % We recommend using the 'compress' option in Beamer to keep header elements compact.
 \documentclass[10pt, compress]{beamer}
 
-% Load our custom theme. Make sure beamerthemeweiming.sty is in the same directory.
-\usepackage{beamerthemeweiming}
+% Load our custom theme. 
+% Try changing [dark] to [light] or [teal] to see the different color schemes!
+\usepackage[dark]{beamerthemeweiming}
 
 % Define your standard metadata. 
 % The \maketitle command has been overridden to output this cleanly.
-\title{Extreme-Mass-Ratio Inspirals}
-\subtitle{Probing the Galactic Center}
+\title{Ancient Greek and Absurdity}
+\subtitle{Aorist Cats and Dual Parrots}
 \author{Pau Amaro Seoane}
 \date{\today}
 
@@ -115,72 +139,120 @@ Below is a fully documented, minimal working example showcasing how to structure
 % ---------------------------------------------------------
 % In this theme, \section{} silently updates the progress bar mathematics
 % and the Table of Contents, but does NOT insert an automatic blank slide.
-\section{Introduction}
+\section{The Aorist Tense and Confused Felines}
 
 % ---------------------------------------------------------
 % 3. STANDARD CONTENT FRAME
 % ---------------------------------------------------------
-\begin{frame}{Planar Dimensional Reduction}
+\begin{frame}{The Punctiliar Cat}
   
   % Use \idea{} for the setup or main concept of the slide.
-  \idea{Planar detectors project 3D waves into a scalar.}
+  \idea{The Aorist tense (from \textit{a-oristos}, "without horizon") expresses a simple, undefined action in the past.}
+  
+  \vspace{0.3cm}
   
   % Use narrow environments to pack information densely without wasting space.
   \begin{narrow_itemize}
-    \item This creates an inescapable degeneracy.
-    \item We must account for orbital eccentricity.
-    \item Background noise limits low-frequency bands.
+    \item \grey{The Imperfect:} The cat \textit{was knocking} the vase over (ongoing).
+    \item \grey{The Perfect:} The cat \textit{has knocked} the vase over (and the owner is currently angry).
+    \item \grey{The Aorist:} The cat \textit{knocked} the vase over. It happened. Boom.
   \end{narrow_itemize}
   
-  \vspace{0.5cm} % Add some breathing room before the conclusion.
+  \vspace{0.5cm} 
+  
+  \idea{The Sketch Element:}
+  
+  \begin{narrow_itemize}
+    \item A violently confused cat sits next to shattered porcelain.
+    \item The cat did not "used to knock it over". It was a singular, absurd event.
+  \end{narrow_itemize}
+
+  \vspace{0.5cm}
   
   % Pair \idea{} with \point{} to drive home the slide's takeaway.
   % \point{} automatically applies the custom dimred color and italics.
-  \idea{The solution:} \point{A single sphere changes everything.}
+  \idea{The Grammatical Reality:} \point{The Aorist cat takes no responsibility for the consequences.}
   
   % Example of using custom gray citation macros at the bottom of a slide.
   \vspace{1cm}
-  \myrefs{Reference: \myREF{Amaro-Seoane et al. 2026} | \Citep{LISA Consortium 2025}}
+  \myrefs{Reference: \myREF{Smyth 1920, \S 1923} | \Citep{Ministry of Silly Felines, 1971}}
 \end{frame}
 
 % ---------------------------------------------------------
-% 4. PLOT-ONLY FRAME
+% 4. CUSTOM TIKZ BOXES
 % ---------------------------------------------------------
-% \plotslide consumes the entire frame to display a figure. 
-% It automatically applies a 1.5s fade-in transition (viewer permitting).
-% Requires a file named 'violin_plots.pdf' in a 'figures' subfolder.
-\plotslide{figures/violin_plots.pdf}
+\begin{frame}{The Aorist Passive Participle}
+  \begin{center}
+    \begin{tikzpicture}
+      % TitleBox: A bold, orange, rounded rectangle with white text.
+      \node[TitleBox] (mainbox) {The \textit{lytheis} (having-been-loosed) cat.};
+      
+      % note: An inverted version (white fill, orange border, black text).
+      \node[note, below=0.5cm of mainbox] {A passive event completed in the past.};
+    \end{tikzpicture}
+  \end{center}
+  
+  \vspace{0.5cm}
+  
+  \begin{center}
+    \begin{tikzpicture}
+      % box: A light blue container with a red border.
+      \node[box] (infobox) {
+        \begin{minipage}{0.8\textwidth}
+          \centering
+          The Confused Cat Sketch:\\
+          \vspace{0.2cm}
+          "I wish to register a complaint about this feline!\\
+          It is a \textit{having-been-confused} (Aorist Passive) cat!"\\
+          "No sir, it's just in a state of present continuous bewilderment!"
+        \end{minipage}
+      };
+      % fancytitle: A helper style to add a tab to the top of 'box'.
+      \node[fancytitle, right=10pt] at (infobox.north west) {Dialogue Note};
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
 
 % ---------------------------------------------------------
-% 5. PLOT WITH COMMENTS FRAME
+% 5. PLOT-ONLY FRAME
+% ---------------------------------------------------------
+\section{The Dual Case}
+
+% \plotslide consumes the entire frame to display a figure. 
+% It automatically applies a 1.5s fade-in transition (viewer permitting).
+\plotslide{example-image.pdf}
+
+% ---------------------------------------------------------
+% 6. PLOT WITH COMMENTS FRAME
 % ---------------------------------------------------------
 % \plotslidecomment pushes the image up and provides space for up to 4 comments.
 % The comments are formatted using the ultra-compact figcommentlist environment.
 % Empty brackets at the end signify unused comment slots.
-\plotslidecomment{figures/envelope.pdf}
-  {The median shift grows linearly with velocity.}
-  {The envelope saturates for mass ratios of $q = 0.30$.}
-  {Notice the cutoff at higher frequencies.}
-  {} % The fourth comment slot is left empty and will be ignored.
+\plotslidecomment{example-image.pdf}
+  {Ancient Greek features Singular, Plural, and the rare \textbf{Dual} number.}
+  {The Dual is used strictly for pairs (e.g., two eyes, two hands, two parrots).}
+  {Customer: "I wish to return \textit{to psittako} (these two parrots)."}
+  {Shopkeeper: "They are resting! Both of them! A dual state of rest!"}
 
 % ---------------------------------------------------------
-% 6. PLAIN TRANSITION FRAME
+% 7. PLAIN TRANSITION FRAME
 % ---------------------------------------------------------
 % \plain strips all headers, footers, and progress bars. 
-% It sets the background to the dark primary color with white text.
-\plain{Part II: Observational Signatures}
+% It sets the background to the dark primary color with white text, 
+% regardless of the global color scheme chosen.
+\plain{Part III: The Optative of Wish}
 
 % ---------------------------------------------------------
-% 7. MULTIMEDIA FRAME
+% 8. MULTIMEDIA FRAME
 % ---------------------------------------------------------
 % \slidemovie embeds video content. 
 % Arg 1: the video file. 
 % Arg 2: a static placeholder image (poster).
 % Arg 3: the caption text.
-\slidemovie{animation.mp4}{poster.png}{Precession of the rotation axis.}
+\slidemovie{example-image.pdf}{example-image.pdf}{A video of a cat wishing for a fish: "Eithe ho ichthys pareie!"}
 
 \end{document}
-```
+~~~
 
 ---
 
@@ -209,46 +281,46 @@ It strictly enforces `pdflatex` compilation to prevent OpenType/TrueType system 
 
 #### `\idea{text}`
 Wraps regular content without formatting. Designed to be used alongside `\point{}` to cleanly separate a setup from its conclusion in your source code.
-```latex
+~~~latex
 \idea{This is the main idea.} \point{This is the punchline.}
-```
+~~~
 
 #### `\point{text}`
 Highlights the key insight in **dimred italic**. Use this for the single most important takeaway on the slide.
-```latex
+~~~latex
 \point{The degeneracy is broken instantly.}
-```
+~~~
 
 #### `\plain{text}`
-Creates a minimalist, high-contrast slide with vertically centered text. It disables headers, footers, and progress bars, applying the dark teal primary color as the background. Ideal for section breaks or powerful quotes.
-```latex
+Creates a minimalist, high-contrast slide with vertically centered text. It disables headers, footers, and progress bars, applying the dark teal primary color as the background. Ideal for section breaks or powerful quotes. Note: This command retains its dark teal background even if the `[light]` or `[dark]` options are used.
+~~~latex
 \plain{Let's now consider the implications.}
-```
+~~~
 
 ### 2. Plots and Media
 
 #### `\plotslide[options]{filename}`
 Displays a plot scaled and centered perfectly, utilizing a 1.5-second fade-in transition to ease eye strain.
-```latex
+~~~latex
 \plotslide{figures/violin_plots.pdf}
 \plotslide[<+->]{figures/animation.pdf}  % With overlay support
-```
+~~~
 
 #### `\plotslidecomment[options]{filename}{comment1}{comment2}{comment3}{comment4}`
 Pushes a plot to the top of the slide and creates an ultra-compact list of bullet points below it. You can provide up to 4 comments; empty arguments are automatically ignored.
-```latex
+~~~latex
 \plotslidecomment{figures/plot.pdf}{First observation}{Second}{}{}
-```
+~~~
 
 #### `\slidemovie[options]{filename}{poster}{caption}`
 Embeds a playable video. A static preview image (`poster`) is shown on the slide; clicking it begins playback.
-```bash
+~~~bash
 # Pro-tip: Extract a poster frame using ffmpeg:
 ffmpeg -i animation.mp4 -vframes 1 poster.png
-```
-```latex
+~~~
+~~~latex
 \slidemovie{animation.mp4}{poster.png}{Simulation of an EMRI.}
-```
+~~~
 
 ### 3. List Environments
 
@@ -267,11 +339,11 @@ Pre-configured TikZ shapes for visually organizing text or creating callouts.
 *   **`box`**: A light blue box with a red border.
 *   **`sectionbox`**: A borderless blue box with white text.
 
-```latex
+~~~latex
 \begin{tikzpicture}
   \node[TitleBox] {Important Concept};
 \end{tikzpicture}
-```
+~~~
 
 ### 5. Citation and Color Macros
 
@@ -294,9 +366,9 @@ You are likely compiling with `xelatex` on a system without Cantarell installed 
 ### Movie doesn't play
 1. **Viewer Support:** Ensure you are using **Okular** (Linux) or **Adobe Acrobat**. Standard viewers like Evince or macOS Preview often lack multimedia support.
 2. **Codec Issue:** Convert your video to MP4 with the H.264 codec to maximize compatibility:
-   ```bash
+   ~~~bash
    ffmpeg -i input.mov -c:v libx264 -pix_fmt yuv420p output.mp4
-   ```
+   ~~~
 
 ### Progress bar doesn't advance or references show as `?`
 Beamer requires multiple passes to calculate the total frame count. 
@@ -306,7 +378,7 @@ Beamer requires multiple passes to calculate the total frame count.
 
 ## License
 
-```text
+~~~text
 Copyright (c) 2026 Pau Amaro Seoane
 
 Permission to use, copy, modify, and/or distribute this software for any
@@ -320,7 +392,7 @@ ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
 WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-```
+~~~
 
 ---
 
