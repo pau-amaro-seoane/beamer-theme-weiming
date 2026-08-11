@@ -1,6 +1,6 @@
 # beamerthemeweiming
 
-A clean, high-clarity Beamer template named after Wèimíng Hú (未名湖) — the "Unnamed Lake" at Peking University. Designed specifically for astrophysics, gravitational-wave physics, and any presentation requiring graceful handling of large plots, media embeds, and dense academic citations.
+A clean, high-clarity Beamer template named after Wèimíng Hú (未名湖) — the "Unnamed Lake" at Peking University. Designed specifically for any presentation requiring handling of large plots, media embeds, and citations.
 
 ---
 
@@ -190,7 +190,7 @@ To ensure maximum compatibility and to automatically handle multiple compilation
 
 It strictly enforces `pdflatex` compilation to prevent OpenType/TrueType system font errors.
 
-> **Note for OpenBSD Users:** The default `make` utility on OpenBSD may not parse the provided `Makefile` correctly due to syntax differences. Please ensure you install and use GNU Make by running `gmake` instead of `make`.
+> **Note for OpenBSD Users:** The default `make` utility on OpenBSD may not parse the provided `Makefile` correctly due to syntax differences. Please ensure you install and use GNU Make by running `gmake` instead of `make`. As an OpenBSD user, apologies...
 
 ### Usage
 
