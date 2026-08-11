@@ -1,0 +1,223 @@
+% =============================================================================
+% WEIMING BEAMER THEME - COMPREHENSIVE EXAMPLE
+% =============================================================================
+% 
+% This file serves as the definitive reference guide for the Weiming Beamer 
+% theme. It demonstrates every custom environment, semantic markup command, 
+% and structural tool provided by the theme.
+%
+% Compile this file using pdfLaTeX (via the provided Makefile) to ensure 
+% optimal font rendering and progress bar calculation.
+%
+% Note: All Ancient Greek words are transliterated into Latin characters 
+% to ensure safe pdfLaTeX compilation without requiring extra font packages.
+% =============================================================================
+
+% We use the 'compress' option to keep the Beamer header routing compact,
+% which aligns perfectly with Weiming's minimalist philosophy.
+\documentclass[10pt, compress]{beamer}
+
+% Load the custom Weiming theme. Make sure beamerthemeweiming.sty is present.
+% Choose between: 
+%               - light
+%		- dark
+%		- teal
+\usepackage[light]{beamerthemeweiming}
+
+% =============================================================================
+% METADATA SETUP
+% =============================================================================
+% Define the standard presentation metadata. The Weiming \maketitle macro 
+% will consume these elements and output a perfectly centered, clean title page.
+
+\title{Ancient Greek and Absurdity}
+\subtitle{Aorist Cats and Dual Parrots}
+\author{Pau Amaro Seoane}
+\date{\today}
+
+\begin{document}
+
+% -----------------------------------------------------------------------------
+% 1. TITLE SLIDE
+% -----------------------------------------------------------------------------
+% The \maketitle command in Weiming is overridden to force a [plain] slide 
+% layout, removing all navigation bars, footers, and progress tracks.
+\maketitle
+
+% -----------------------------------------------------------------------------
+% 2. SECTION DECLARATION
+% -----------------------------------------------------------------------------
+% In this theme, \section{} silently updates the progress bar mathematics
+% and the Table of Contents, but does NOT insert an automatic blank slide.
+\section{The Aorist Tense and Confused Felines}
+
+% -----------------------------------------------------------------------------
+% 3. STANDARD CONTENT FRAME & SEMANTIC MARKUP
+% -----------------------------------------------------------------------------
+\begin{frame}{The Punctiliar Cat}
+  
+  % \idea{} is a semantic wrapper. It applies no visual formatting, but it 
+  % clearly distinguishes the setup of your slide in the source code.
+  \idea{The Aorist tense (from \textit{a-oristos}, "without horizon") expresses a simple, undefined action in the past.}
+  
+  \vspace{0.3cm}
+  
+  % We use the custom \narrow_itemize environment. Standard LaTeX lists waste
+  % enormous amounts of vertical space. This environment packs items tightly.
+  \begin{narrow_itemize}
+    \item \grey{The Imperfect:} The cat \textit{was knocking} the vase over (ongoing).
+    \item \grey{The Perfect:} The cat \textit{has knocked} the vase over (and the owner is currently angry).
+    \item \grey{The Aorist:} The cat \textit{knocked} the vase over. It happened. Boom.
+  \end{narrow_itemize}
+  
+  \vspace{0.5cm}
+  
+  \idea{The Sketch Element:}
+  
+  \begin{narrow_itemize}
+    \item A violently confused cat sits next to shattered porcelain.
+    \item The cat did not "used to knock it over". It was a singular, absurd event.
+  \end{narrow_itemize}
+
+  \vspace{0.5cm}
+  
+  % Pair \idea{} with \point{} to drive home the slide's takeaway.
+  % \point{} automatically applies the custom 'dimred' color and italics.
+  \idea{The Grammatical Reality:} \point{The Aorist cat takes no responsibility for the consequences.}
+  
+  \vspace{1cm}
+  
+  % Example of using custom gray citation macros at the bottom of a slide.
+  % \myrefs creates a dotted line, followed by your tightly spaced citations.
+  % \myREF highlights a specific reference in orange (great for self-citations).
+  \myrefs{Reference: \myREF{Smyth 1920, \S 1923} | \Citep{Ministry of Silly Felines, 1971}}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% 4. CUSTOM TIKZ BOXES
+% -----------------------------------------------------------------------------
+\begin{frame}{The Aorist Passive Participle}
+  
+  % Weiming provides pre-configured TikZ boxes for emphasizing warnings, 
+  % rules, or theorems without needing to write raw TikZ code every time.
+  \begin{center}
+    \begin{tikzpicture}
+      % TitleBox: A bold, orange, rounded rectangle with white text.
+      \node[TitleBox] (mainbox) {The \textit{lytheis} (having-been-loosed) cat.};
+      
+      % note: An inverted version (white fill, orange border, black text).
+      % We use the 'positioning' library (loaded in the sty) to place it.
+      \node[note, below=0.5cm of mainbox] {A passive event completed in the past.};
+    \end{tikzpicture}
+  \end{center}
+  
+  \vspace{0.5cm}
+  
+  \begin{center}
+    \begin{tikzpicture}
+      % box: A light blue container with a red border.
+      \node[box] (infobox) {
+        \begin{minipage}{0.8\textwidth}
+          \centering
+          The Confused Cat Sketch:\\
+          \vspace{0.2cm}
+          "I wish to register a complaint about this feline!\\
+          It is a \textit{having-been-confused} (Aorist Passive) cat!"\\
+          "No sir, it's just in a state of present continuous bewilderment!"
+        \end{minipage}
+      };
+      % fancytitle: A helper style to add a tab to the top of 'box'.
+      \node[fancytitle, right=10pt] at (infobox.north west) {Dialogue Note};
+    \end{tikzpicture}
+  \end{center}
+
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% 5. PLAIN TRANSITION FRAME
+% -----------------------------------------------------------------------------
+% \plain strips all headers, footers, and progress bars. 
+% It sets the background to the dark primary color with white text.
+% This is perfect for chapter breaks, dramatic pauses, or title cards.
+\plain{Part II: The Dual Number and Deceased Avians}
+
+% -----------------------------------------------------------------------------
+% 6. SECTION UPDATE
+% -----------------------------------------------------------------------------
+\section{The Dual Case}
+
+% -----------------------------------------------------------------------------
+% 7. PLOT-ONLY FRAME
+% -----------------------------------------------------------------------------
+% \plotslide consumes the entire frame to display a figure. 
+% It automatically applies a 1.5s fade-in transition (if supported by your PDF 
+% viewer) to soften the visual impact of switching to a bright graph.
+% We use 'example-image.pdf' here as a placeholder for a graph showing 
+% "Parrot Vitality over Time".
+\plotslide{example-image.pdf}
+
+% -----------------------------------------------------------------------------
+% 8. PLOT WITH COMMENTS FRAME
+% -----------------------------------------------------------------------------
+% \plotslidecomment pushes the image to the top of the slide and provides 
+% precise spacing for up to 4 comments at the bottom.
+% The comments are formatted using the ultra-compact 'figcommentlist' environment.
+% Empty brackets at the end signify unused comment slots.
+\plotslidecomment{example-image.pdf}
+  {Ancient Greek features Singular, Plural, and the rare \textbf{Dual} number.}
+  {The Dual is used strictly for pairs (e.g., two eyes, two hands, two parrots).}
+  {Customer: "I wish to return \textit{to psittako} (these two parrots)."}
+  {Shopkeeper: "They are resting! Both of them! A dual state of rest!"}
+
+% -----------------------------------------------------------------------------
+% 9. ANOTHER CONTENT FRAME (REPEATING COMMANDS FOR EMPHASIS)
+% -----------------------------------------------------------------------------
+\begin{frame}{Declining the Dead Parrots}
+  
+  \idea{In the second declension, the dual endings are famously sparse:}
+  
+  \begin{narrow_itemize}
+    \item Nominative/Accusative/Vocative: \textit{-o} (e.g., \textit{to psittako} - the two parrots).
+    \item Genitive/Dative: \textit{-oin} (e.g., \textit{toin psittakoin} - of/to the two parrots).
+  \end{narrow_itemize}
+  
+  \vspace{0.5cm}
+  
+  \idea{The resulting sketch dialogue:}
+  
+  \begin{narrow_itemize}
+    \item \grey{Customer:} "I nailed \textit{to psittako} (the two parrots) to the perch!"
+    \item \grey{Shopkeeper:} "If you hadn't nailed them, \textit{to psittako} would have muscled up to the bars and \textit{voom}!"
+    \item \grey{Customer:} "Mate, \textit{to psittako} are deceased! They have ceased to be!"
+  \end{narrow_itemize}
+
+  \vspace{0.5cm}
+  
+  \idea{The final verdict:} \point{The dual parrots have joined the choir invisible!}
+  
+  \vspace{0.5cm}
+  \myrefs{Reference: \myREF{Chapman \& Cleese 1969} | \Cite{Goodwin's Greek Grammar}}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% 10. PLAIN TRANSITION FRAME (AGAIN)
+% -----------------------------------------------------------------------------
+\plain{Part III: The Optative of Wish}
+
+% -----------------------------------------------------------------------------
+% 11. MULTIMEDIA FRAME
+% -----------------------------------------------------------------------------
+\section{The Optative Mood}
+
+% \slidemovie embeds local video content directly into the PDF.
+% Arg 1: [options] (optional, e.g., width, height, autoplay)
+% Arg 2: the actual video file path (e.g., animation.mp4).
+% Arg 3: a static placeholder image (poster) displayed before clicking.
+% Arg 4: the caption text displayed beneath the video.
+%
+% Note: We use 'example-image.pdf' for both the movie and the poster here
+% just so this file compiles out-of-the-box on your machine without needing 
+% an actual media file present. In a real presentation, Arg 2 would be a .mp4.
+\slidemovie{example-image.pdf}{example-image.pdf}{A video of a cat wishing for a fish: "Eithe ho ichthys pareie!" (Would that the fish were here!)}
+
+\end{document}

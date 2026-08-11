@@ -39,10 +39,44 @@
 \mode<presentation>
 
 % ===================================================================================
-% SECTION 1: CORE PACKAGE DEPENDENCIES & ROBUST TYPOGRAPHY
+% SECTION 1: OPTIONS DECLARATION (LIGHT / DARK / TEAL)
+% ===================================================================================
+
+% We define boolean (true/false) variables to track which color theme is requested.
+\newif\if@weiming@dark
+\newif\if@weiming@teal
+
+% Set the default state of all custom background modes to false (which equals 'light' mode)
+\@weiming@darkfalse
+\@weiming@tealfalse
+
+% Declare the 'light' option (Default behavior)
+\DeclareOption{light}{
+  \@weiming@darkfalse
+  \@weiming@tealfalse
+}
+
+% Declare the 'dark' option (Pure black background, white ink)
+\DeclareOption{dark}{
+  \@weiming@darktrue
+  \@weiming@tealfalse
+}
+
+% Declare the 'teal' option (Dark teal background, white ink)
+\DeclareOption{teal}{
+  \@weiming@darkfalse
+  \@weiming@tealtrue
+}
+
+% Process all provided package options before loading the rest of the file.
+% For example, \usepackage[teal]{beamerthemeweiming} will trigger \@weiming@tealtrue.
+\ProcessOptions\relax
+
+% ===================================================================================
+% SECTION 2: CORE PACKAGE DEPENDENCIES & ROBUST TYPOGRAPHY
 % ========================================================================
 
-%xcolor: Required for defining exact HTML, RGB, and grayscale colors.
+% xcolor: Required for defining exact HTML, RGB, and grayscale colors.
 \RequirePackage{xcolor}
 
 % graphicx: The standard package for including external images (PDF, PNG, JPEG).
@@ -101,7 +135,7 @@
 \setbeamerfont{page number in head/foot}{size=\scriptsize} 
 
 % ======================================================================
-% SECTION 2: COLOR DEFINITIONS & MACROS
+% SECTION 3: COLOR DEFINITIONS & MACROS
 % ==============================================================================
 
 % Internal toggles for the progress bar rendering logic
@@ -163,8 +197,45 @@
 % MyURL forces a URL to render in bold font for higher visibility.
 \newcommand{\MyURL}[1]{\href{#1}{\textbf{#1}}}
 
+% ==============================================================================
+% SECTION 4: GLOBAL THEME APPLICATION (DARK / TEAL OVERRIDES)
+% ==============================================================================
+
+% If the user called \usepackage[dark]{beamerthemeweiming}, apply pure black background overrides.
+\if@weiming@dark
+  \setbeamercolor{background canvas}{bg=black}
+  \setbeamercolor{normal text}{fg=white, bg=black}
+  \setbeamercolor{frametitle}{bg=black, fg=white}
+  \setbeamercolor{title}{fg=white}
+  \setbeamercolor{subtitle}{fg=white}
+  \setbeamercolor{author}{fg=white}
+  \setbeamercolor{date}{fg=white}
+  \setbeamercolor{institute}{fg=white}
+  \setbeamercolor{itemize item}{fg=white}
+  \setbeamercolor{itemize subitem}{fg=white}
+  \setbeamercolor{itemize subsubitem}{fg=white}
+  \setbeamercolor{item}{fg=white}
+\fi
+
+% If the user called \usepackage[teal]{beamerthemeweiming}, apply dark teal overrides.
+% We utilize 'mDarkTeal' natively provided by the imported metropolis color palette.
+\if@weiming@teal
+  \setbeamercolor{background canvas}{bg=mDarkTeal}
+  \setbeamercolor{normal text}{fg=white, bg=mDarkTeal}
+  \setbeamercolor{frametitle}{bg=mDarkTeal, fg=white}
+  \setbeamercolor{title}{fg=white}
+  \setbeamercolor{subtitle}{fg=white}
+  \setbeamercolor{author}{fg=white}
+  \setbeamercolor{date}{fg=white}
+  \setbeamercolor{institute}{fg=white}
+  \setbeamercolor{itemize item}{fg=white}
+  \setbeamercolor{itemize subitem}{fg=white}
+  \setbeamercolor{itemize subsubitem}{fg=white}
+  \setbeamercolor{item}{fg=white}
+\fi
+
 % =================================================================================
-% SECTION 3: TIKZ STYLES (CUSTOM BOXES)
+% SECTION 5: TIKZ STYLES (CUSTOM BOXES)
 % ========================================================================
 
 % TitleBox: A prominent orange container with white text and thick borders.
@@ -191,7 +262,7 @@
                     inner ysep=10pt, text=white, text centered]
 
 % ===========================================================================
-% SECTION 4: LIST ENVIRONMENTS (COMPACT)
+% SECTION 6: LIST ENVIRONMENTS (COMPACT)
 % =====================================================================================
 
 % Standard LaTeX lists consume massive amounts of vertical space. 
@@ -220,7 +291,7 @@
 }{\end{description}}
 
 % =====================================================================
-% SECTION 5: BEAMER TEMPLATES & PROGRESS BAR LOGIC
+% SECTION 7: BEAMER TEMPLATES & PROGRESS BAR LOGIC
 % ==========================================================================
 
 % Strip away standard Beamer navigation symbols to minimize visual clutter
@@ -257,7 +328,7 @@
 
 % Macro to render the large progress bar (typically on section divider frames)
 \def\progressbar@sectionprogressbar{%
-  {\usebeamercolor{palette primary}%
+  {\usebeamercolor{palette primary}% Load mtheme primary palette
     \progressbar@tmpcounta=\insertframenumber 
     \progressbar@tmpcountb=\inserttotalframenumber 
     \progressbar@tmpdim=\progressbar@pbwd
@@ -294,8 +365,8 @@
   \divide\progressbar@tmpdim by \progressbar@tmpcountb
   \multiply\progressbar@tmpdim by 100
   {%
-    \usebeamercolor{palette quaternary}%
-    \usebeamercolor{alerted text}%
+    \usebeamercolor{palette quaternary}% Load mtheme colors
+    \usebeamercolor{alerted text}% Load mtheme alert colors
     \begin{tikzpicture}[tight background]
       % Draw the empty track across the top of the slide
       \draw[palette quaternary.fg, fill=palette quaternary.fg] (0, 0) rectangle ($(\paperwidth, 0.6pt) - (0.4pt, 0)$);
@@ -337,8 +408,8 @@
 {%
 % A simple color box aligned to the bottom right for slide numbering
 \begin{beamercolorbox}[wd=\textwidth,ht=3ex,dp=3ex,leftskip=0.3cm,rightskip=0.3cm]{structure}%
-  \hfill\usebeamerfont{page number in head/foot}%
-  \insertframenumber%
+  \hfill\usebeamerfont{page number in head/foot}% Align right
+  \insertframenumber% Print slide number
 \end{beamercolorbox}%
 }
 
@@ -346,7 +417,7 @@
 \makeatother
 
 % ===============================================================================
-% SECTION 6: SEMANTIC MARKUP & DISPLAY ENVIRONMENTS
+% SECTION 8: SEMANTIC MARKUP & DISPLAY ENVIRONMENTS
 % ====================================================================
 
 % \idea{text}: A semantic wrapper that applies no formatting. 
@@ -358,8 +429,8 @@
 \newcommand{\point}[1]{\textcolor{dimred}{\textit{#1}}}
 
 % \plain{text}: Generates a totally bare slide (no headers/footers).
-% It uses the dark primary color palette to create a high-contrast break 
-% between visually dense slides.
+% It INTENTIONALLY always uses the dark primary color palette to create a high-contrast 
+% break between visually dense slides. This remains unaffected by the [dark] or [teal] options.
 \newcommand{\plain}[1]{%
   \begingroup
   \setbeamercolor{background canvas}{use=palette primary,bg=palette primary.fg}
@@ -446,7 +517,7 @@
 }
 
 % =========================================================================
-% SECTION 7: CUSTOM TITLE PAGE LAYOUT
+% SECTION 9: CUSTOM TITLE PAGE LAYOUT
 % ==================================================================================
 
 % Enter core LaTeX programming mode
