@@ -175,9 +175,12 @@
 
 % --- TEXT COLOR MACROS ---
 % These commands quickly wrap text in the grayscale colors defined above.
-\newcommand{\grey}[1]{\textcolor{light-gray}{#1}}
-\newcommand{\verygrey}[1]{\textcolor{ultra-light-gray}{#1}}
-\newcommand{\supergrey}[1]{\textcolor{beyond-ultra-light-gray}{#1}}
+\newcommand{\greylightest}[1]{\textcolor{black!10}{#1}} % 10% black
+\newcommand{\greylighter}[1]{\textcolor{black!30}{#1}}  % 30% black
+\newcommand{\greylight}[1]{\textcolor{black!50}{#1}}    % 50% black
+\newcommand{\greydark}[1]{\textcolor{black!70}{#1}}     % 70% black
+\newcommand{\greydarker}[1]{\textcolor{black!90}{#1}}   % 90% black
+
 
 % --- CITATION MACROS ---
 % Specialized commands for rendering academic citations in various sizes.
@@ -432,10 +435,20 @@
 % \plain{text}: Generates a totally bare slide (no headers/footers).
 % It INTENTIONALLY always uses the dark primary color palette to create a high-contrast 
 % break between visually dense slides. This remains unaffected by the [dark] or [teal] options.
+%\newcommand{\plain}[1]{%
+%  \begingroup
+%  \setbeamercolor{background canvas}{use=palette primary,bg=palette primary.fg}
+%  \begin{frame}[plain]{#1}
+%    \centering
+%    % Vertically centers the text and forces it to white
+%    \vfill\vspace{1em}\usebeamerfont{section title}\textcolor{white}{#1}\vfill
+%  \end{frame}
+%  \endgroup
+%}
 \newcommand{\plain}[1]{%
   \begingroup
   \setbeamercolor{background canvas}{use=palette primary,bg=palette primary.fg}
-  \begin{frame}[plain]{#1}
+  \begin{frame}[plain] % Removed {#1} here to prevent title generation
     \centering
     % Vertically centers the text and forces it to white
     \vfill\vspace{1em}\usebeamerfont{section title}\textcolor{white}{#1}\vfill
